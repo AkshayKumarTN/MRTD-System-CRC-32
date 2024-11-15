@@ -1,0 +1,41 @@
+[
+    {
+        "document_type": "P",
+        "issuing_country": "UTO",
+        "last_name": "DOE",
+        "first_name": "JOHN",
+        "middle_name": "A",
+        "passport_number": "123456789",
+        "nationality": "UTO",
+        "birth_date": "850101",
+        "sex": "M",
+        "expiration_date": "300101",
+        "personal_number": "1234567890"
+    },
+    {
+        "document_type": "P",
+        "issuing_country": "EUE",
+        "last_name": "SMITH",
+        "first_name": "JANE",
+        "middle_name": "B",
+        "passport_number": "987654321",
+        "nationality": "EUE",
+        "birth_date": "900201",
+        "sex": "F",
+        "expiration_date": "310201",
+        "personal_number": "0987654321"
+    },
+    {
+        "document_type": "P",
+        "issuing_country": "EU",
+        "last_name": "ERIKSSON",
+        "first_name": "ANNA",
+        "middle_name": "MARIA",
+        "passport_number": "L898902C3",
+        "nationality": "GBN",
+        "birth_date": "740812",
+        "sex": "F",
+        "expiration_date": "120415",
+        "personal_number": "ZE184226B8"
+    }
+]
