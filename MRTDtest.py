@@ -1,5 +1,5 @@
 import unittest
-from MRTD import encode_mrz, validate_mrz
+from MRTD import encode_mrz, validate_mrz, read_user_data, validate_mrz_from_json
 
 class TestMRTD(unittest.TestCase):
 
@@ -141,6 +141,23 @@ class TestMRTD(unittest.TestCase):
         line2 = "123ABC7892UWW8501012M30010171234567890<<<<4"  # Invalid country code in Line 2
         self.assertFalse(validate_mrz(line1, line2))  # Invalid MRZ should return False
 
+    def test_read_user_data(self):
+        """Test read_user_data"""
+        file_path = 'user_data.json'
+        result = read_user_data(file_path)
+        self.assertEqual(len(result), 3)
+        self.assertEqual(result[0]["first_name"], "JOHN")
+        self.assertEqual(result[1]["last_name"], "SMITH")
+        self.assertEqual(result[1]["passport_number"], "987654321")
 
-if __name__ == "__main__":
-    unittest.main()
+    def test_validate_mrz_from_json(self):
+       
+        file_path = "mrz_input.json"
+        # Call the function to validate MRZ from JSON data
+        result = validate_mrz_from_json(file_path)
+
+        # Verify the results
+        self.assertEqual(len(result), 3)
+        self.assertTrue(result[0]["is_valid"])
+        self.assertTrue(result[1]["is_valid"])
+
