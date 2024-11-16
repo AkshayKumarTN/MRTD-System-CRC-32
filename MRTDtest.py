@@ -161,3 +161,16 @@ class TestMRTD(unittest.TestCase):
         self.assertTrue(result[0]["is_valid"])
         self.assertTrue(result[1]["is_valid"])
 
+    # Mutation Test Cases
+    def test_validate_mrz_exceed_length_42(self):
+        """Test validate_mrz for an MRZ line2 with exceeding 42 characters."""
+        line1 = "P<UTODOE<<JOHN<A<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
+        line2 = "L898902C30GBN7408123F1204153ZE184226B8<<<<<<<7" 
+        self.assertFalse(validate_mrz(line1, line2))
+
+    def test_validate_mrz_short_length_42(self):
+        """Test validate_mrz for an MRZ line2 with length shorter than 42 characters."""
+        line1 = "P<UTODOE<<JOHN<A<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
+        line2 = "L898902C30GBN7408123F1204153ZE18422<<7" 
+        self.assertFalse(validate_mrz(line1, line2))
+

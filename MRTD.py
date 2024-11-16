@@ -63,7 +63,7 @@ def validate_code(code: str) -> bool:
 
 def validate_mrz(line1: str, line2: str) -> bool:
       # Check if line2 has the expected length (e.g., 44 characters for a passport MRZ)
-    if len(line2) < 42:  # Adjust the length based on the MRZ standard you're following
+    if len(line2) < 43 or len(line2) > 43:  # Adjust the length based on the MRZ standard you're following
         return False
     """Validate the MRZ lines by checking that the check digits are correct."""
     document_type, country_line1, name = parse_mrz_line1(line1)
