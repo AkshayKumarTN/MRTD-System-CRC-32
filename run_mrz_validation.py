@@ -1,4 +1,4 @@
-from MRTD import validate_mrz_from_json, read_user_data, encode_mrz, write_encoded_records, measure_execution_times
+from MRTD import validate_mrz_from_json, read_user_data, encode_mrz, write_encoded_records, measure_execution_times_encode_mrz, measure_execution_times_validate_mrz
 import time
 
 
@@ -6,7 +6,8 @@ def main():
     while True:
         print("1. Generate Encoded Passport")  
         print("2. Validate Passport Data")
-        print("3. Measure Execution Times")
+        print("3. Measure Execution Times for Encoding Passport")
+        print("4. Measure Execution Times for Validate Passport")
         option = input("Enter your choice (type 'exit' or 0 to quit): ").strip().lower()
         
         if option == '1':
@@ -43,8 +44,13 @@ def main():
             
         elif option == '3':
             input_file = 'records_decoded.json'
-            output_csv = 'execution_times.csv'
-            measure_execution_times(input_file, output_csv)
+            output_csv = 'execution_times_encode_mrz.csv'
+            measure_execution_times_encode_mrz(input_file, output_csv)
+        
+        elif option == '4':
+            input_file = 'records_encoded.json'
+            output_csv = 'execution_times_validate_mrz.csv'
+            measure_execution_times_validate_mrz(input_file, output_csv)
         
         elif option == 'exit' or option == '0':
             print("Exiting program.")
