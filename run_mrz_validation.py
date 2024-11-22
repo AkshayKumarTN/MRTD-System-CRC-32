@@ -1,4 +1,4 @@
-from MRTD import validate_mrz_from_json, read_user_data, encode_mrz
+from MRTD import validate_mrz_from_json, read_user_data, encode_mrz, write_encoded_records
 
 def main():
     while True:
@@ -7,14 +7,16 @@ def main():
         option = input("Enter your choice (type 'exit' or 0 to quit): ").strip().lower()
         
         if option == '1':
-            file_path = 'user_data.json'
-            users = read_user_data(file_path)
-            for user in users:
-                line1, line2 = encode_mrz(user)
-                print("Encoded MRZ for user:")
-                print("Line 1:", line1)
-                print("Line 2:", line2)
-                print("-" * 50)
+            file_path = 'records_decoded.json'
+            output_file_path = 'records_encoded.json'
+            records_encoded = []
+            records = read_user_data(file_path)
+            for user_record in records['records_decoded']:
+                encoded_rocord = encode_mrz(user_record)
+                records_encoded.append(encoded_rocord)
+            write_encoded_records(records_encoded, output_file_path)
+            print("The MRZ encoding process is complete. The encoded records have been saved to 'records_encoded.json'.")
+            
         
         elif option == '2':
             file_path = "mrz_input.json"  # Path to the input JSON file

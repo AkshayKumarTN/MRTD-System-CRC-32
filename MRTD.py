@@ -17,24 +17,25 @@ def calculate_crc32_check_digit(input_data: str) -> int:
 def encode_mrz(data):
     """Encode MRZ data based on user input, including calculated CRC32 check digits."""
     # Encode Line 1
-    name_field = f"{data['last_name']}<<{data['first_name']}<{data['middle_name']}".replace(" ", "<").ljust(39, '<')[:39]
-    line1 = f"{data['document_type']}<{data['issuing_country']}{name_field}"
+    document_type ='p';
+    name_field = f"{data['line1']['last_name']}<<{data['line1']['given_name']}".replace(" ", "<").ljust(39, '<')[:39]
+    line1 = f"{document_type}<{data['line1']['issuing_country']}{name_field}"
     # Calculate check digits using CRC32 for relevant fields
-    passport_check_digit = calculate_crc32_check_digit(data['passport_number'])
-    birth_check_digit = calculate_crc32_check_digit(data['birth_date'])
-    expiry_check_digit = calculate_crc32_check_digit(data['expiration_date'])
-    personal_number_check_digit = calculate_crc32_check_digit(data['personal_number']) if data['personal_number'] else '<'
+    passport_check_digit = calculate_crc32_check_digit(data['line2']['passport_number'])
+    birth_check_digit = calculate_crc32_check_digit(data['line2']['birth_date'])
+    expiry_check_digit = calculate_crc32_check_digit(data['line2']['expiration_date'])
+    personal_number_check_digit = calculate_crc32_check_digit(data['line2']['personal_number']) if data['line2']['personal_number'] else '<'
     # Encode Line 2
-    passport_number = data['passport_number'].ljust(9, '<')[:9]
-    nationality = data['nationality'].ljust(3, '<')[:3]
-    birth_date = data['birth_date'].ljust(6, '<')[:6]
-    expiration_date = data['expiration_date'].ljust(6, '<')[:6]
-    personal_number = data['personal_number'].ljust(14, '<')[:14]
+    passport_number = data['line2']['passport_number'].ljust(9, '<')[:9]
+    country_code = data['line2']['country_code'].ljust(3, '<')[:3]
+    birth_date = data['line2']['birth_date'].ljust(6, '<')[:6]
+    expiration_date = data['line2']['expiration_date'].ljust(6, '<')[:6]
+    personal_number = data['line2']['personal_number'].ljust(14, '<')[:14]
 
-    line2 = (f"{passport_number}{passport_check_digit}{nationality}{birth_date}{birth_check_digit}"
-             f"{data['sex']}{expiration_date}{expiry_check_digit}{personal_number}{personal_number_check_digit}")
+    line2 = (f"{passport_number}{passport_check_digit}{country_code}{birth_date}{birth_check_digit}"
+             f"{data['line2']['sex']}{expiration_date}{expiry_check_digit}{personal_number}{personal_number_check_digit}")
 
-    return line1, line2
+    return line1+';'+line2
 
 def parse_mrz_line1(line1: str):
     """Parse line 1 of MRZ to extract document type, country, and name fields."""
@@ -58,7 +59,7 @@ def parse_mrz_line2(line2: str):
     return passport_number, passport_check_digit, country, dob, dob_check_digit, sex, expiration_date, expiry_check_digit, personal_number, personal_number_check_digit
 
 def validate_code(code: str) -> bool:
-    """Validate if a code for nationality, place of birth, or issuing state is valid."""
+    """Validate if a code for country, place of birth, or issuing state is valid."""
     return code in VALID_CODES
 
 def validate_mrz(line1: str, line2: str) -> bool:
@@ -110,3 +111,8 @@ def read_user_data(file_path):
     with open(file_path, 'r') as file:
         user_data = json.load(file)
     return user_data
+
+def write_encoded_records(encoded_records, output_path):
+    """Writes encoded records to a JSON file."""
+    with open(output_path, 'w') as file:
+        json.dump({'records_encoded': encoded_records}, file, indent=4)
