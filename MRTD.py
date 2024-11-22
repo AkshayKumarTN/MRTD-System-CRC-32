@@ -56,7 +56,7 @@ def parse_mrz_line2(line2: str):
     sex = line2[20]
     expiration_date = line2[21:27]
     expiry_check_digit = line2[27]
-    personal_number = line2[28:38]
+    personal_number = line2[28:37]
     personal_number_check_digit = line2[-1]
     return passport_number, passport_check_digit, country, dob, dob_check_digit, sex, expiration_date, expiry_check_digit, personal_number, personal_number_check_digit
 
@@ -71,14 +71,14 @@ def validate_mrz(line1: str, line2: str) -> bool:
     """Validate the MRZ lines by checking that the check digits are correct."""
     document_type, country_line1, name = parse_mrz_line1(line1)
     # Validate country code in line 1 (issuing state)
-    if not validate_code(country_line1):
-        print(f"Invalid country code in line 1: {country_line1}")
-        return False
+    #if not validate_code(country_line1):
+        #print(f"Invalid country code in line 1: {country_line1}")
+        #return False
     # Parse line 2 fields
     passport_number, passport_check_digit, country_line2, dob, dob_check_digit, sex, expiration_date, expiry_check_digit, personal_number, personal_number_check_digit = parse_mrz_line2(line2)
-    if not validate_code(country_line2):
-        print(f"Invalid country code in line 2: {country_line2}")
-        return False
+    #if not validate_code(country_line2):
+        #print(f"Invalid country code in line 2: {country_line2}")
+        #return False
    # Calculate check digits for each relevant field in line 2
     calculated_passport_check_digit = int(calculate_crc32_check_digit(passport_number))
     calculated_dob_check_digit = calculate_crc32_check_digit(dob)
@@ -97,9 +97,10 @@ def validate_mrz_from_json(file_path: str):
     with open(file_path, 'r') as file:
         mrz_data = json.load(file)
     results = []
-    for entry in mrz_data:
-        line1 = entry.get("line1")
-        line2 = entry.get("line2")
+    for entry in mrz_data['records_encoded']:
+        parts = entry.split(';')
+        line1 = parts[0]
+        line2 = parts[1]
         is_valid = validate_mrz(line1, line2)
         results.append({
             "line1": line1,

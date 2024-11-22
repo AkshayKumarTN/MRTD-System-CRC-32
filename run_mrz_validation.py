@@ -25,14 +25,21 @@ def main():
             
         
         elif option == '2':
-            file_path = "mrz_input.json"  # Path to the input JSON file
+            file_path = "records_encoded.json"  # Path to the input JSON file
             results = validate_mrz_from_json(file_path)
-            
+            is_valid_true = 0
+            is_valid_false = 0
             for result in results:
-                print(f"Line 1: {result['line1']}")
-                print(f"Line 2: {result['line2']}")
-                print(f"Is Valid: {result['is_valid']}")
-                print("-" * 40)
+                if result['is_valid'] == True:
+                    is_valid_true +=1
+                else:
+                    is_valid_false +=1
+                    print(f"Line 1: {result['line1']}")
+                    print(f"Line 2: {result['line2']}")
+                    print(f"Is Valid: {result['is_valid']}")
+                    print("-" * 40)
+            print('Total Valid Data : ', is_valid_true)
+            print('Total Invalid Data : ', is_valid_false)
             
         elif option == '3':
             input_file = 'records_decoded.json'
