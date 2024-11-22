@@ -1,5 +1,7 @@
 import json
 import zlib
+import time
+import csv
 
 def load_valid_codes(file_path="valid_codes.json"):
     """Load valid codes from a JSON file."""
@@ -116,3 +118,39 @@ def write_encoded_records(encoded_records, output_path):
     """Writes encoded records to a JSON file."""
     with open(output_path, 'w') as file:
         json.dump({'records_encoded': encoded_records}, file, indent=4)
+
+def measure_execution_times(input_file, output_csv):
+    """Measure execution times for processing records and write results to a CSV."""
+    results = []
+
+    # Process for record counts: 100, 1000, ..., 10000
+    for k in [100] + list(range(1000, 10001, 1000)):
+        # Measure time without tests
+        start_no_tests = time.perf_counter()
+        records = read_user_data(input_file)['records_decoded'][:k]
+        for record in records:
+            encode_mrz(record)
+        end_no_tests = time.perf_counter()
+
+        # Measure time with tests
+        start_with_tests = time.perf_counter()
+        for record in records:
+            encoded_record = encode_mrz(record)
+            assert encoded_record is not None
+            assert isinstance(encoded_record, str)
+        end_with_tests = time.perf_counter()
+
+        # Calculate execution times
+        exec_time_no_tests = end_no_tests - start_no_tests
+        exec_time_with_tests = end_with_tests - start_with_tests
+
+        # Append results
+        results.append([k, exec_time_no_tests, exec_time_with_tests])
+        print(f"Processed {k} records: {exec_time_no_tests:.4f}s (no tests), {exec_time_with_tests:.4f}s (with tests)")
+    # Write results to CSV
+    with open(output_csv, 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(["Lines_Read", "Exec_Time_No_Tests", "Exec_Time_With_Tests"])
+        writer.writerows(results)
+
+    print(f"Execution times have been saved to {output_csv}")
