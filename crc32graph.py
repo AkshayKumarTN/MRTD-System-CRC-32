@@ -16,11 +16,11 @@ def plot_execution_times(csv_file, plot_filename, dataset_type):
     # Plotting the data
     plt.figure(figsize=(10, 6))
 
-    # Plot Exec_Time_No_Tests
-    plt.plot(data['Lines_Read'], data['Exec_Time_No_Tests'], label=f'{dataset_type.capitalize()} - No Tests', color='b', marker='o')
-
     # Plot Exec_Time_With_Tests
-    plt.plot(data['Lines_Read'], data['Exec_Time_With_Tests'], label=f'{dataset_type.capitalize()} - With Tests', color='r', marker='x')
+    plt.plot(data['Lines_Read'], data['Exec_Time_With_Tests'], label=f'{dataset_type.capitalize()} - No Tests', color='b', marker='o')
+
+    # Plot Exec_Time_No_Tests
+    plt.plot(data['Lines_Read'], data['Exec_Time_No_Tests'], label=f'{dataset_type.capitalize()} - With Tests', color='r', marker='x')
 
     # Adding titles and labels
     plt.title(f'Execution Time Comparison for {dataset_type.capitalize()} Data: With and Without Tests')

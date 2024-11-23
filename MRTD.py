@@ -127,8 +127,8 @@ def measure_execution_times_encode_mrz(input_file, output_csv):
     # Process for record counts: 100, 1000, ..., 10000
     for k in [100] + list(range(1000, 10001, 1000)):
         # Measure time without tests
-        start_no_tests = time.perf_counter()
         records = read_user_data(input_file)['records_decoded'][:k]
+        start_no_tests = time.perf_counter()
         for record in records:
             encode_mrz(record)
         end_no_tests = time.perf_counter()
@@ -163,8 +163,8 @@ def measure_execution_times_validate_mrz(input_file, output_csv):
     # Process for record counts: 100, 1000, ..., 10000
     for k in [100] + list(range(1000, 10001, 1000)):
         # Measure time without tests
-        start_no_tests = time.perf_counter()
         records = read_user_data(input_file)['records_encoded'][:k]
+        start_no_tests = time.perf_counter()
         for record in records:
             parts = record.split(';')
             line1 = parts[0]
